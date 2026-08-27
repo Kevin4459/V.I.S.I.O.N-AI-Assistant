@@ -1,0 +1,79 @@
+# ==============================
+# Python
+# ==============================
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# ==============================
+# Environment / Secrets
+# ==============================
+
+.env
+.env.*
+!.env.example
+
+# ==============================
+# macOS
+# ==============================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ==============================
+# VS Code
+# ==============================
+
+.vscode/
+
+# ==============================
+# Logs
+# ==============================
+
+*.log
+
+# ==============================
+# AI / Model Files
+# ==============================
+
+# Local model files
+*.gguf
+*.safetensors
+*.bin
+
+# ==============================
+# Databases / Local Memory
+# ==============================
+
+*.db
+*.sqlite
+*.sqlite3
+
+# ==============================
+# Node / React
+# ==============================
+
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ==============================
+# Testing / Coverage
+# ==============================
+
+.pytest_cache/
+.coverage
+htmlcov/
