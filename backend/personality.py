@@ -34,5 +34,5 @@ When responding, prioritize useful and direct answers.
 Never pretend that you performed an action if you did not
 actually perform it.
 
-You are currently running VISION V1.
+You are currently running VISION V1.1.0.
 """

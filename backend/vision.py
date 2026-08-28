@@ -9,11 +9,13 @@ from config import (
 
 from personality import SYSTEM_PROMPT
 from memory import ConversationMemory
+from voice import VoiceInput
 
 
 class Vision:
 
     def __init__(self):
+
         self.memory = ConversationMemory()
 
         self.system_message = {
@@ -73,38 +75,91 @@ class Vision:
 def main():
 
     vision = Vision()
+    voice = VoiceInput()
 
     print()
     print("=" * 60)
+
     print(f"{VISION_NAME} V{VISION_VERSION}")
+
     print(
         "Virtual Intelligence System for "
         "Integrated Operations and Navigation"
     )
-    print("=" * 60)
 
+    print("=" * 60)
     print()
+
     print("VISION is online.")
-    print("Type 'exit' to shut down.")
+    print()
+
+    print("Select input mode:")
+    print("[1] Text")
+    print("[2] Voice")
+    print("[3] Exit")
     print()
 
     while True:
 
         try:
 
-            user_input = input("You: ").strip()
+            mode = input("Mode: ").strip()
 
-            if not user_input:
+            if mode == "3":
+
+                print()
+                print("VISION: Shutting down.")
+                break
+
+            if mode not in ["1", "2"]:
+
+                print("Please select 1, 2, or 3.")
                 continue
+
+            # -----------------------------
+            # TEXT INPUT
+            # -----------------------------
+
+            if mode == "1":
+
+                user_input = input("You: ").strip()
+
+            # -----------------------------
+            # VOICE INPUT
+            # -----------------------------
+
+            else:
+
+                user_input = voice.listen()
+
+                if not user_input:
+
+                    print()
+                    print("VISION: I didn't hear anything.")
+                    print()
+
+                    continue
+
+                print()
+                print(f"You: {user_input}")
+
+            # -----------------------------
+            # EXIT COMMANDS
+            # -----------------------------
 
             if user_input.lower() in [
                 "exit",
                 "quit",
                 "shutdown"
             ]:
+
                 print()
                 print("VISION: Shutting down.")
                 break
+
+            # -----------------------------
+            # VISION THINKS
+            # -----------------------------
 
             response = vision.think(user_input)
 
