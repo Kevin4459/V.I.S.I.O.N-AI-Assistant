@@ -4,6 +4,7 @@ import threading
 
 from vision import Vision
 from voice import VoiceInput
+from speech import speak
 
 
 class VisionGUI:
@@ -11,6 +12,7 @@ class VisionGUI:
     def __init__(self, root):
 
         self.root = root
+
         self.root.title("VISION")
         self.root.geometry("700x700")
         self.root.minsize(600, 600)
@@ -20,7 +22,6 @@ class VisionGUI:
         # -----------------------------------------
 
         self.vision = Vision()
-
         self.voice = None
 
         # -----------------------------------------
@@ -220,7 +221,7 @@ class VisionGUI:
 
         self.chat.insert(
             tk.END,
-            f"{speaker}:\n",
+            f"{speaker}:\n"
         )
 
         self.chat.insert(
@@ -299,10 +300,7 @@ class VisionGUI:
         try:
 
             if self.voice is None:
-
-                self.voice = VoiceInput(
-                    duration=5
-                )
+                self.voice = VoiceInput()
 
             user_input = self.voice.listen()
 
@@ -387,12 +385,50 @@ class VisionGUI:
                 f"An error occurred: {error}"
             )
 
+    # =================================================
+    # VISION RESPONSE + VOICE
+    # =================================================
+
     def show_response(self, response):
 
         self.add_message(
             "VISION",
             response
         )
+
+        self.set_status(
+            "VISION is speaking..."
+        )
+
+        # Speak in background so GUI doesn't freeze
+        thread = threading.Thread(
+            target=self.speak_response,
+            args=(response,),
+            daemon=True
+        )
+
+        thread.start()
+
+    def speak_response(self, response):
+
+        try:
+
+            speak(response)
+
+            self.root.after(
+                0,
+                self.finished_speaking
+            )
+
+        except Exception as error:
+
+            self.root.after(
+                0,
+                self.speech_error,
+                str(error)
+            )
+
+    def finished_speaking(self):
 
         self.set_status(
             "Ready"
@@ -413,6 +449,21 @@ class VisionGUI:
         self.add_message(
             "VISION",
             f"Voice input error: {error}"
+        )
+
+        self.set_status(
+            "Ready"
+        )
+
+        self.set_buttons(
+            True
+        )
+
+    def speech_error(self, error):
+
+        self.add_message(
+            "VISION",
+            f"Voice output error: {error}"
         )
 
         self.set_status(
@@ -466,5 +517,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()

@@ -10,12 +10,12 @@ from config import (
 from personality import SYSTEM_PROMPT
 from memory import ConversationMemory
 from voice import VoiceInput
+from speech import speak
 
 
 class Vision:
 
     def __init__(self):
-
         self.memory = ConversationMemory()
 
         self.system_message = {
@@ -24,7 +24,6 @@ class Vision:
         }
 
     def think(self, user_input):
-
         self.memory.add_user_message(user_input)
 
         messages = [
@@ -39,7 +38,6 @@ class Vision:
         }
 
         try:
-
             response = requests.post(
                 OLLAMA_URL,
                 json=payload,
@@ -57,18 +55,15 @@ class Vision:
             return answer
 
         except requests.exceptions.ConnectionError:
-
             return (
                 "I cannot connect to Ollama. "
                 "Please make sure Ollama is running."
             )
 
         except requests.exceptions.Timeout:
-
             return "The model took too long to respond."
 
         except Exception as error:
-
             return f"An error occurred: {error}"
 
 
@@ -79,14 +74,11 @@ def main():
 
     print()
     print("=" * 60)
-
     print(f"{VISION_NAME} V{VISION_VERSION}")
-
     print(
         "Virtual Intelligence System for "
         "Integrated Operations and Navigation"
     )
-
     print("=" * 60)
     print()
 
@@ -106,27 +98,25 @@ def main():
             mode = input("Mode: ").strip()
 
             if mode == "3":
-
                 print()
                 print("VISION: Shutting down.")
                 break
 
             if mode not in ["1", "2"]:
-
                 print("Please select 1, 2, or 3.")
                 continue
 
-            # -----------------------------
-            # TEXT INPUT
-            # -----------------------------
+            # -------------------------
+            # TEXT MODE
+            # -------------------------
 
             if mode == "1":
 
                 user_input = input("You: ").strip()
 
-            # -----------------------------
-            # VOICE INPUT
-            # -----------------------------
+            # -------------------------
+            # VOICE MODE
+            # -------------------------
 
             else:
 
@@ -143,9 +133,9 @@ def main():
                 print()
                 print(f"You: {user_input}")
 
-            # -----------------------------
+            # -------------------------
             # EXIT COMMANDS
-            # -----------------------------
+            # -------------------------
 
             if user_input.lower() in [
                 "exit",
@@ -157,14 +147,29 @@ def main():
                 print("VISION: Shutting down.")
                 break
 
-            # -----------------------------
+            # -------------------------
             # VISION THINKS
-            # -----------------------------
+            # -------------------------
+
+            print()
+            print("VISION is thinking...")
 
             response = vision.think(user_input)
 
+            # -------------------------
+            # VISION RESPONDS
+            # -------------------------
+
             print()
             print(f"VISION: {response}")
+            print()
+
+            # -------------------------
+            # VISION SPEAKS
+            # -------------------------
+
+            speak(response)
+
             print()
 
         except KeyboardInterrupt:
